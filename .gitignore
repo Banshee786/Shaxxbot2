@@ -1,0 +1,8 @@
+﻿node_modules
+package-lock,json
+secrets.json
+.vs/
+*.njproj
+*.sln
+bin/
+obj/
