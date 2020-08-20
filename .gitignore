@@ -2,7 +2,7 @@
 package-lock.json
 secrets.json
 .vs/
-*.njproj
+*.njsproj
 *.sln
 bin/
 obj/
