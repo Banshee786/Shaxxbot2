@@ -2,15 +2,15 @@
   "name": "shaxxbot2",
   "version": "1.0.0",
   "description": "A rewritten discord bot",
-  "repository":  "https://github.com/Banshee786/Shaxxbot2",
+  "repository": "https://github.com/Banshee786/Shaxxbot2",
   "main": "index.js",
   "scripts": {
-    {
-      "test":  "echo \"Error: no test specified\" && exit 1"
-    },
-    "author": "banshee786",
-    "license": "ISC",
-    "dependencies": {
-      //some hellish nightmare
-    }
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "banshee786",
+  "license": "ISC",
+  "dependencies": {
+    "discord-dynamic-music-bot-addon": "^2.1.9",
+    "discord.js": "^12.3.1"
   }
+}

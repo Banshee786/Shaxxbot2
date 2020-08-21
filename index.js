@@ -1,24 +1,51 @@
 const { prefix } = require('./config.json');
-const { token, youtubeAPI } = require('./secrets,json');
+const { token, youtubeAPI } = require('./secrets.json');
 
 const fs = require('fs');
+
 const Discord = require('discord.js');
 const client = new Discord.Client();
-clinet.commands = new Discord.Collection();
+const MusicBotAddon = require("discord-dynamic-music-bot-addon");
+const options = {
+    // messageUpdateRate: number, // how fast should message be updated in second. Under 5 seconds its not going to work. (default: 5)
+    // selfDeleteTime: number, // error message that bot sends to notify user about something are going to delete in seconds. (default: 5)
+    leaveVoiceChannelAfter: 20, // when there isn't playing anything when should bot leave the channel is seconds. (default: 20)
+    leaveVoiceChannelAfterAllMembersLeft: 20, // when no one is in channel and nothing is playing when should bot leave the channel is seconds. (default: 20)
+    // maxTrackLength: number, // How long can requested track be in minutes. (default: 180 )
+    // autoQueryDetection: boolean, // Smart feature a user only have to type player command and youtube url link and its going to automatically search or look for url. (default: true)
+    // autoPlaylistDetection: boolean, // should autoQueryDetection look for playlist link and automatically parse them? (default: false)
+    // waitTimeBetweenTracks: number,   // how longs should bot wait between switching tracks in seconds. (default: 2)
+    // maxItemsInPlayList: number, // how many songs can playlist have in it. (default: 100)
+    // maxUserItemsInPlayList: number,  // how many songs can user have in playlist (default: 10)
+    // playlistParseWait: number, // wait time between fetching each track form playlist in seconds (default: 2)
+    // multipleParser: boolean, // should bot look for multiple url in one message eg (player yt_url yt_url) (default: true)
+    // playlistParse: boolean, // should bot parse playlists at all? (default: false)
+    // votePercentage: number, // how many votes in percentage are required to perform vote action in percentage (default: 60)
+    // coolDown: number, // how repeatedly can user send bot command. It's recommended to be higher tan 5 seconds in seconds (default: 5)
+    // deleteUserMessage: boolean, // should delete user command messages (default: true)
+    // hardDeleteUserMessage: boolean, // should delete every user message when the player is active (default:false)
+    reactionButtons: true, // should add reaction button to easily control the player with out entering commands (default: true)
+    // suggestReplay: number, // should bot offer you a replay after the end of the song in seconds 0 to disable the feature (default: 20)
+    // https://github.com/Lidcer/DiscordDynamicMusicBotAddon/blob/master/example/language.json.
+    // language: language, // Custom language pack is check url above. By defining custom command you are only added aliases to existing commands the default ones are still going to be available
+};
+const youtubePlayer = new MusicBotAddon.YoutubePlayer(youtubeAPI, options);
+
+client.commands = new Discord.Collection();
 //const Music = require('NEED NEW DISCORD MUSIC ADDON');
 //that should be all the prereqs... hopefully
 
 //start of command structure
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endswith('.js'));
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
-    cont command = require('./commands/${file}');
+    const command = require(`./commands/${file}`);
     client.commands.set(command.name, command);
 }
 
 client.on('ready', () => {
-    console.log('Logged in as ${client.user.tag}!');
-    console.log('Prefix is ${prefix}.');
+    console.log(`Logged in as ${client.user.tag}!`);
+    console.log(`Prefix is ${prefix}.`);
     client.user.setActivity('!shaxxhelp', { type: 'WATCHING' });
 });
 
@@ -94,7 +121,7 @@ client.on('message', msg => {
     ];
     var rand = Math.floor(Math.random() * quotes.length);
 
-    if (msg.isMentioned(client.user)) {
+    if (msg.mentions.has(client.user)) {
         msg.channel.send(quotes[rand]);
     }
 
@@ -108,6 +135,8 @@ client.on('message', msg => {
             console.error(error);
             msg.reply('That command does not work around here, guardian...');
         }
+    } else {
+        youtubePlayer.onMessagePrefix(msg, prefix);
     }
 });
 
