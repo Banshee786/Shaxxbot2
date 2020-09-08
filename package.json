@@ -10,7 +10,8 @@
   "author": "banshee786",
   "license": "ISC",
   "dependencies": {
-    "discord-dynamic-music-bot-addon": "^2.1.9",
+    "@discordjs/opus": "^0.3.2",
+    "discord-player": "^2.3.1",
     "discord.js": "^12.3.1"
   }
 }

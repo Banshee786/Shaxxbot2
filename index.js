@@ -5,34 +5,12 @@ const fs = require('fs');
 
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const MusicBotAddon = require("discord-dynamic-music-bot-addon");
-const options = {
-    // messageUpdateRate: number, // how fast should message be updated in second. Under 5 seconds its not going to work. (default: 5)
-    // selfDeleteTime: number, // error message that bot sends to notify user about something are going to delete in seconds. (default: 5)
-    // leaveVoiceChannelAfter: 20, // when there isn't playing anything when should bot leave the channel is seconds. (default: 20)
-    // leaveVoiceChannelAfterAllMembersLeft: 20, // when no one is in channel and nothing is playing when should bot leave the channel is seconds. (default: 20)
-    // maxTrackLength: number, // How long can requested track be in minutes. (default: 180 )
-    // autoQueryDetection: boolean, // Smart feature a user only have to type player command and youtube url link and its going to automatically search or look for url. (default: true)
-    // autoPlaylistDetection: boolean, // should autoQueryDetection look for playlist link and automatically parse them? (default: false)
-    // waitTimeBetweenTracks: number,   // how longs should bot wait between switching tracks in seconds. (default: 2)
-    // maxItemsInPlayList: number, // how many songs can playlist have in it. (default: 100)
-    // maxUserItemsInPlayList: number,  // how many songs can user have in playlist (default: 10)
-    // playlistParseWait: number, // wait time between fetching each track form playlist in seconds (default: 2)
-    // multipleParser: boolean, // should bot look for multiple url in one message eg (player yt_url yt_url) (default: true)
-    // playlistParse: boolean, // should bot parse playlists at all? (default: false)
-    // votePercentage: number, // how many votes in percentage are required to perform vote action in percentage (default: 60)
-    // coolDown: number, // how repeatedly can user send bot command. It's recommended to be higher tan 5 seconds in seconds (default: 5)
-    // deleteUserMessage: boolean, // should delete user command messages (default: true)
-    // hardDeleteUserMessage: boolean, // should delete every user message when the player is active (default:false)
-    // reactionButtons: true, // should add reaction button to easily control the player with out entering commands (default: true)
-    // suggestReplay: number, // should bot offer you a replay after the end of the song in seconds 0 to disable the feature (default: 20)
-    // https://github.com/Lidcer/DiscordDynamicMusicBotAddon/blob/master/example/language.json.
-    // language: language, // Custom language pack is check url above. By defining custom command you are only added aliases to existing commands the default ones are still going to be available
-};
-const youtubePlayer = new MusicBotAddon.YoutubePlayer(youtubeAPI, options);
+
+const { Player } = require("discord-player");
+const musicbot = new Player(client);
+client.player = musicbot;
 
 client.commands = new Discord.Collection();
-//const Music = require('NEED NEW DISCORD MUSIC ADDON');
 //that should be all the prereqs... hopefully
 
 //start of command structure
@@ -52,9 +30,9 @@ client.on('ready', () => {
 //TODO: Error reporting, somehow
 
 
-client.on('message', msg => {
+client.on('message', async (msg) => {
     //debugging tool
-    //console.log(msg.content);
+    console.log(msg.content);
 
     //Ignoring users not in server
     if (!msg.guild) return;
@@ -70,11 +48,22 @@ client.on('message', msg => {
 
     const args = msg.content.slice(prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
+    console.log(`command was ${command}`);
+    console.log(`remaining args: ${args.join(' ')}`);
 
     if (command === 'leave') {
         if (msg.member.voiceChannel) {
             msg.member.voiceChannel.leave();
         }
+    }
+
+    if (command === 'help') {
+        let helpList = '\n';
+        client.commands.forEach(command => {
+            helpList += `${command.name} : ${command.description}\n`;
+        });
+        msg.reply(helpList);
+        return;
     }
 
     let quotes = [
@@ -130,13 +119,18 @@ client.on('message', msg => {
         //but do it here so that tags will still work
         if (!msg.content.startsWith(prefix)) return;
         try {
-            client.commands.get(command).execute(msg, args);
+            await client.commands.get(command).execute(msg, args);
         } catch (error) {
             console.error(error);
             msg.reply('That command does not work around here, guardian...');
         }
-    } else {
-        youtubePlayer.onMessagePrefix(msg, prefix);
+    // } else {
+        // if (command == 'play') {
+        //     let track = await client.player.play(msg.member.voice.channel, args.join(' '), msg.member.user.tag);
+        //     msg.channel.send(`Currently playing ${track.name}! - Requested by ${track.requestedBy}`);
+        // } else {
+            // msg.reply('unknown command');
+        // }
     }
 });
 
