@@ -9,8 +9,8 @@ const MusicBotAddon = require("discord-dynamic-music-bot-addon");
 const options = {
     // messageUpdateRate: number, // how fast should message be updated in second. Under 5 seconds its not going to work. (default: 5)
     // selfDeleteTime: number, // error message that bot sends to notify user about something are going to delete in seconds. (default: 5)
-    leaveVoiceChannelAfter: 20, // when there isn't playing anything when should bot leave the channel is seconds. (default: 20)
-    leaveVoiceChannelAfterAllMembersLeft: 20, // when no one is in channel and nothing is playing when should bot leave the channel is seconds. (default: 20)
+    // leaveVoiceChannelAfter: 20, // when there isn't playing anything when should bot leave the channel is seconds. (default: 20)
+    // leaveVoiceChannelAfterAllMembersLeft: 20, // when no one is in channel and nothing is playing when should bot leave the channel is seconds. (default: 20)
     // maxTrackLength: number, // How long can requested track be in minutes. (default: 180 )
     // autoQueryDetection: boolean, // Smart feature a user only have to type player command and youtube url link and its going to automatically search or look for url. (default: true)
     // autoPlaylistDetection: boolean, // should autoQueryDetection look for playlist link and automatically parse them? (default: false)
@@ -24,7 +24,7 @@ const options = {
     // coolDown: number, // how repeatedly can user send bot command. It's recommended to be higher tan 5 seconds in seconds (default: 5)
     // deleteUserMessage: boolean, // should delete user command messages (default: true)
     // hardDeleteUserMessage: boolean, // should delete every user message when the player is active (default:false)
-    reactionButtons: true, // should add reaction button to easily control the player with out entering commands (default: true)
+    // reactionButtons: true, // should add reaction button to easily control the player with out entering commands (default: true)
     // suggestReplay: number, // should bot offer you a replay after the end of the song in seconds 0 to disable the feature (default: 20)
     // https://github.com/Lidcer/DiscordDynamicMusicBotAddon/blob/master/example/language.json.
     // language: language, // Custom language pack is check url above. By defining custom command you are only added aliases to existing commands the default ones are still going to be available
@@ -139,5 +139,8 @@ client.on('message', msg => {
         youtubePlayer.onMessagePrefix(msg, prefix);
     }
 });
+
+// client.on("error", console.error);
+// client.on("debug", console.info);
 
 client.login(token);
