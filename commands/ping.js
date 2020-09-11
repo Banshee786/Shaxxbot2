@@ -1,7 +1,5 @@
-﻿module.exports = {
-    name: 'ping',
-    description: 'the most basic torubleshooter we can come up with',
-    execute(message, args) {
-        message.channel.send('Pong');
-    },
-};
+const emotes = require ("../config/emojis.json");
+
+exports.run = async (client, message, args) => {
+    message.channel.send(`Ping: ${client.ws.ping} ms ${emotes.success}`)
+}
