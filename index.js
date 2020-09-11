@@ -43,6 +43,6 @@ fs.readdir("./commands/", (err, files) => {
 // quotes moved to ./events/message.js
 
 client.on("error", console.error);
-// client.on("debug", console.info);
+client.on("debug", console.info);
 
 client.login(token);

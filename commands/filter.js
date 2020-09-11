@@ -9,6 +9,12 @@ exports.run = async (client, message, args) => {
     //If there's no music
     if(!client.player.isPlaying(message.guild.id)) return message.channel.send(`No music playing on this server ${emotes.error}`);
 
+    //Role identification
+    let adminRole = message.guild.roles.find("name", "Admin");
+    if (!message.member.roles.has(adminRole)) {
+      return message.channel.send(`Sorry, you dont have access to this command. ${emotes.error}`);
+    }
+
     //Filter
     const filter = args[0];
     if(!filter) return message.channel.send(`Please specify a valid filter to enable or disable ${emotes.error}`);

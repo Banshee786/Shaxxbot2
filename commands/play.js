@@ -9,7 +9,7 @@ exports.run = async (client, message, args) => {
 
     const aTrackIsAlreadyPlaying = client.player.isPlaying(message.guild.id);
 
-    //If there's already a track playing 
+    //If there's already a track playing
     if(aTrackIsAlreadyPlaying){
 
         //Add the track to the queue
@@ -50,7 +50,7 @@ exports.run = async (client, message, args) => {
             message.channel.send(`Now playing ${newTrack.name} ... ${emotes.music}`);
         })
         .on('channelEmpty', () => {
-            message.channel.send(`Music stoppted, there are no more members in the voice channel ${emotes.error}`);
+            message.channel.send(`Music stopted, there are no more members in the voice channel ${emotes.error}`);
         });
     }
 }
